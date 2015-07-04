@@ -1,0 +1,125 @@
+if &cp | set nocp | endif
+let s:cpo_save=&cpo
+set cpo&vim
+inoremap <Nul> 
+inoremap <expr> <Up> pumvisible() ? "\" : "\<Up>"
+inoremap <expr> <Down> pumvisible() ? "\" : "\<Down>"
+inoremap <silent> <Plug>NERDCommenterInsert  <BS>:call NERDComment('i', "insert")
+inoremap <silent> <C-Tab> =UltiSnips#ListSnippets()
+inoremap <silent> <SNR>16_AutoPairsReturn =AutoPairsReturn()
+snoremap <silent>  c
+nmap  h
+xmap  h
+omap  h
+xnoremap <silent> 	 :call UltiSnips#SaveLastVisualSelection()gvs
+snoremap <silent> 	 :call UltiSnips#ExpandSnippetOrJump()
+nmap <NL> j
+xmap <NL> j
+omap <NL> j
+map  k
+map  l
+snoremap  "_c
+nnoremap   za
+nmap ,ca <Plug>NERDCommenterAltDelims
+xmap ,cu <Plug>NERDCommenterUncomment
+nmap ,cu <Plug>NERDCommenterUncomment
+xmap ,cb <Plug>NERDCommenterAlignBoth
+nmap ,cb <Plug>NERDCommenterAlignBoth
+xmap ,cl <Plug>NERDCommenterAlignLeft
+nmap ,cl <Plug>NERDCommenterAlignLeft
+nmap ,cA <Plug>NERDCommenterAppend
+xmap ,cy <Plug>NERDCommenterYank
+nmap ,cy <Plug>NERDCommenterYank
+xmap ,cs <Plug>NERDCommenterSexy
+nmap ,cs <Plug>NERDCommenterSexy
+xmap ,ci <Plug>NERDCommenterInvert
+nmap ,ci <Plug>NERDCommenterInvert
+nmap ,c$ <Plug>NERDCommenterToEOL
+xmap ,cn <Plug>NERDCommenterNested
+nmap ,cn <Plug>NERDCommenterNested
+xmap ,cm <Plug>NERDCommenterMinimal
+nmap ,cm <Plug>NERDCommenterMinimal
+xmap ,c  <Plug>NERDCommenterToggle
+nmap ,c  <Plug>NERDCommenterToggle
+xmap ,cc <Plug>NERDCommenterComment
+nmap ,cc <Plug>NERDCommenterComment
+nmap ,ss :setlocal spell!0
+xmap ,ss :setlocal spell!0
+omap ,ss :setlocal spell!0
+xnoremap ,y "+y
+nnoremap ,g :call RunGoFile()
+nnoremap ,r :call RunTestFile()
+nnoremap ,d :Make!
+nnoremap ,1 :set number!
+nnoremap ,c :SyntasticCheck:Errors
+nnoremap ,a :Ag
+nnoremap ,l :call ToggleNumber()
+nnoremap ,u :GundoToggle
+nnoremap ,w :NERDTree
+nmap <silent> ,n :nohlsearch
+nmap j gj
+xmap j gj
+omap j gj
+nmap k gk
+xmap k gk
+omap k gk
+xnoremap <silent> <Plug>NERDCommenterUncomment :call NERDComment("x", "Uncomment")
+nnoremap <silent> <Plug>NERDCommenterUncomment :call NERDComment("n", "Uncomment")
+xnoremap <silent> <Plug>NERDCommenterAlignBoth :call NERDComment("x", "AlignBoth")
+nnoremap <silent> <Plug>NERDCommenterAlignBoth :call NERDComment("n", "AlignBoth")
+xnoremap <silent> <Plug>NERDCommenterAlignLeft :call NERDComment("x", "AlignLeft")
+nnoremap <silent> <Plug>NERDCommenterAlignLeft :call NERDComment("n", "AlignLeft")
+nnoremap <silent> <Plug>NERDCommenterAppend :call NERDComment("n", "Append")
+xnoremap <silent> <Plug>NERDCommenterYank :call NERDComment("x", "Yank")
+nnoremap <silent> <Plug>NERDCommenterYank :call NERDComment("n", "Yank")
+xnoremap <silent> <Plug>NERDCommenterSexy :call NERDComment("x", "Sexy")
+nnoremap <silent> <Plug>NERDCommenterSexy :call NERDComment("n", "Sexy")
+xnoremap <silent> <Plug>NERDCommenterInvert :call NERDComment("x", "Invert")
+nnoremap <silent> <Plug>NERDCommenterInvert :call NERDComment("n", "Invert")
+nnoremap <silent> <Plug>NERDCommenterToEOL :call NERDComment("n", "ToEOL")
+xnoremap <silent> <Plug>NERDCommenterNested :call NERDComment("x", "Nested")
+nnoremap <silent> <Plug>NERDCommenterNested :call NERDComment("n", "Nested")
+xnoremap <silent> <Plug>NERDCommenterMinimal :call NERDComment("x", "Minimal")
+nnoremap <silent> <Plug>NERDCommenterMinimal :call NERDComment("n", "Minimal")
+xnoremap <silent> <Plug>NERDCommenterToggle :call NERDComment("x", "Toggle")
+nnoremap <silent> <Plug>NERDCommenterToggle :call NERDComment("n", "Toggle")
+xnoremap <silent> <Plug>NERDCommenterComment :call NERDComment("x", "Comment")
+nnoremap <silent> <Plug>NERDCommenterComment :call NERDComment("n", "Comment")
+snoremap <silent> <Del> c
+snoremap <silent> <BS> c
+snoremap <silent> <C-Tab> :call UltiSnips#ListSnippets()
+inoremap <silent> 	 =UltiSnips#ExpandSnippetOrJump()
+inoremap jk 
+let &cpo=s:cpo_save
+unlet s:cpo_save
+set autoindent
+set autoread
+set background=dark
+set backspace=2
+set completefunc=youcompleteme#Complete
+set completeopt=preview,menuone
+set cpoptions=aAceFsB
+set expandtab
+set fileencodings=ucs-bom,utf-8,default,latin1
+set helplang=en
+set hlsearch
+set ignorecase
+set incsearch
+set iskeyword=@,48-57,_,192-255,:
+set laststatus=2
+set modelines=1
+set mouse=a
+set omnifunc=youcompleteme#OmniComplete
+set pastetoggle=<F2>
+set runtimepath=~/.vim,~/.vim/bundle/vim-fugitive,~/.vim/bundle/Vundle.vim,~/.vim/bundle/ag.vim,~/.vim/bundle/auto-pairs,~/.vim/bundle/vim-colors-solarized,~/.vim/bundle/ultisnips,~/.vim/bundle/vim-snippets,~/.vim/bundle/vim-airline,~/.vim/bundle/YouCompleteMe,~/.vim/bundle/nerdtree,~/.vim/bundle/vim-template,~/.vim/bundle/SimpylFold,~/.vim/bundle/nerdcommenter,/usr/local/share/vim/vimfiles,/usr/local/share/vim/vim74,/usr/local/share/vim/vimfiles/after,~/.vim/after,~/.vim/bundle/Vundle.vim,~/.vim/bundle/vim-fugitive/after,~/.vim/bundle/Vundle.vim/after,~/.vim/bundle/ag.vim/after,~/.vim/bundle/auto-pairs/after,~/.vim/bundle/vim-colors-solarized/after,~/.vim/bundle/ultisnips/after,~/.vim/bundle/vim-snippets/after,~/.vim/bundle/vim-airline/after,~/.vim/bundle/YouCompleteMe/after,~/.vim/bundle/nerdtree/after,~/.vim/bundle/vim-template/after,~/.vim/bundle/SimpylFold/after,~/.vim/bundle/nerdcommenter/after
+set shiftwidth=4
+set showcmd
+set showmatch
+set softtabstop=4
+set tabstop=4
+set undodir=~/.vim/undodir
+set undofile
+set updatetime=2000
+set wildmenu
+set window=55
+" vim: set ft=vim :

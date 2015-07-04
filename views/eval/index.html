@@ -1,0 +1,17 @@
+{{extend 'layout.html'}}
+{{for i,row in enumerate(rows):}}
+{{if i==items_per_page: break}}
+<div id="data">
+{{=row.form}}<br />    
+
+{{if page:}}
+<a href="{{=URL(args=[page-1], vars=dict(user_id=request.vars.user_id, test_set=request.vars.test_set))}}">previous</a>
+{{pass}}
+
+{{if len(rows)>items_per_page:}}
+<a href="{{=URL(args=[page+1], vars=dict(user_id=request.vars.user_id, test_set=request.vars.test_set))}}">next</a>
+{{pass}}
+{{pass}}
+<br/>
+    Finish item:<br/>
+    {{=finish_item}}

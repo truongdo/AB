@@ -1,0 +1,10 @@
+<script>
+jQuery(document).ready(function(){
+    jQuery('#add_form').hide()
+   jQuery('#toggle_btn').click(function(){jQuery('#add_form').toggle()});
+});
+</script>
+{{if globals().get('batch_add', False):}}
+{{=batch_add}}
+{{pass}}
+<br/>
