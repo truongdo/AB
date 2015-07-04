@@ -86,21 +86,28 @@ def check_update(table_name):
 
 def update_record(d):
     parts = d.strip().split("|")
-    if len(parts) < 4:
+    if len(parts) < 7:
         return 0
 
-    if len(parts) == 5:
+    if len(parts) == 7:
         record_id = db.t_data.insert(f_name=parts[0], f_test_set_id=parts[1],\
-            f_text=parts[2], f_audio_path=parts[3], f_system=parts[4])
-    else:
+            f_text=parts[2], \
+            f_audio_path_1=parts[3], f_method_1=parts[4],
+            f_audio_path_2=parts[5], f_method_2=parts[6],
+            )
+    elif len(parts) == 9:
         record_id = db.t_data.insert(f_name=parts[0], f_test_set_id=parts[1],\
-            f_text=parts[2], f_audio_path=parts[3], f_system=None)
+            f_text=parts[2], \
+            f_audio_path_1=parts[3], f_method_1=parts[4],
+            f_audio_path_2=parts[5], f_method_2=parts[6],
+            f_audio_path_ref=parts[7], f_method_ref=parts[8],
+            )
 
     return record_id
 
 def gen_form(table_name):
     if table_name == "t_data":
-        hint = "utt_name|test_set_id|text|audio_path|system[optional]"
+        hint = "utt_name|test_set_id|text|audio_path_1|method1|audio_path2|method2[|audio_path3|reference]"
     form = XML(INPUT(_type="button",_value="Batch add",_id="toggle_btn")+\
                FORM(TEXTAREA(_type="text",_name=table_name,_placeholder=hint),INPUT(_type="submit",_value="Submit"), _id="add_form"))
     return form

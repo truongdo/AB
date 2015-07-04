@@ -2,7 +2,7 @@ from gluon.storage import Storage
 settings = Storage()
 
 settings.migrate = True
-settings.title = 'MOS Evaluation'
+settings.title = 'AB[x] Evaluation'
 settings.subtitle = 'powered by web2py'
 settings.author = 'Truong Do'
 settings.author_email = 'do.truong.dj3@is.naist.jp'

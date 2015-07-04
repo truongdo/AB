@@ -4,52 +4,73 @@ from gluon import *
 from gluon.sql import Rows
 import abc
 
-class Utter:
-    __metaclass__ = abc.ABCMeta
-    def __init__(self, id, name, text, audio_path, system=None):
+
+class AudioUtter():
+    def __init__(self, id, name, text, audio_path_1, method_1,
+                 audio_path_2, method_2, audio_path_ref=None, method_ref=None):
         self.id = id
         self.name = name
-        self.system = system
         self.text = text
-        self.audio_path = audio_path
+        self.audio_path_1 = audio_path_1
+        self.method_1 = method_1
+        self.audio_path_2 = audio_path_2
+        self.method_2 = method_2
+        self.audio_path_ref = audio_path_ref
+        self.method_ref = method_ref
 
-    def __str__(self):
-        return self.name
-
-    @abc.abstractmethod
-    def update_result(self, result):
-        return
-
-    @abc.abstractmethod
-    def save2db(self):
-        return
-
-    def gen_htmlwav(self, request, autoplay=False):
-        if autoplay:
-            return XML("<audio id=\"audio_play\" controls autoplay src=\"%s\"></audio>"%correct_path(request, self.audio_path))
-        else:
-            return XML("<audio id=\"audio_play\" controls src=\"%s\"></audio>"%correct_path(request, self.audio_path))
-
-
-class AudioUtter(Utter):
-    def __init__(self, id, name, text, audio_path, system=None):
-        super(self.__class__, self).__init__(id, name, \
-                text, audio_path, system)
     @staticmethod
     def from_record(record):
-        return AudioUtter(record.id, record.f_name, record.f_text, record.f_audio_path, record.f_system)
+        return AudioUtter(record.id, record.f_name, record.f_text,
+                          record.f_audio_path_1, record.f_method_1,
+                          record.f_audio_path_2, record.f_method_2,
+                          record.f_audio_path_ref, record.f_method_ref,
+                          )
+
+    def gen_html(self, request, autoplay=False):
+        audio_1 = correct_path(request, self.audio_path_1)
+        audio_2 = correct_path(request, self.audio_path_2)
+        audio_ref = None
+        if self.audio_path_ref and self.audio_path_ref != "None":
+            audio_ref = correct_path(request, self.audio_path_ref) 
+        
+        data_audio = [audio_1, audio_2, audio_ref]
+        data_method = [self.method_1, self.method_2, self.method_ref]
+        
+        rows = []
+        for idx, x in enumerate(data_audio):
+            if x and idx < 2:
+                if autoplay:
+                    rows.append(TR(
+                                TD(), TD(XML("<audio id=\"audio_play\" controls autoplay src=\"%s\"></audio>" % x)),
+                                TD(), TD(INPUT(_type="radio", _name="cb", _value=data_method[idx]))
+                                )
+                               )
+                else:
+                    rows.append(TR(
+                                TD(), TD(XML("<audio id=\"audio_play\" controls src=\"%s\"></audio>" % x)),
+                                TD(), TD(INPUT(_type="radio", _name="cb", _value=data_method[idx]))
+                                )
+                               )
+            if idx == 2 and x:
+                    rows.append(TR(
+                                  TD(
+                                    XML("<font color=\"red\"> <b>Reference<b> </font> " )
+                                  ),
+                                  TD(
+                                    XML("<audio id=\"audio_play\" controls autoplay src=\"%s\"></audio>" % data_audio[2])
+                                  ),
+                                )
+                               )
+        rows.reverse()
+        html = TABLE(*rows)    
+        return html
+
 
     def update_result(self, result):
         self.result = result
 
     def save2db(self):
         return
-
-    def gen_word_html(self):
-        words = []
-        for w in self.text.split():
-            words.append(TD(w))
-        return words
 
     def gen_check_box_nature(self):
         radio = []
@@ -88,10 +109,10 @@ class ResultTable:
                     (self.table.f_user_id == user_id), f_utt_id=utt.id, f_user_id=user_id, f_score=int(utt.score))
         return utt_id
 
-    def save(self,utt_id, name, test_set, user_id, score, system=None):
+    def save(self,utt_id, name, test_set, user_id, result):
         utt_id = self.table.update_or_insert((self.table.f_utt_id==utt_id) & \
-                        (self.table.f_user_id == user_id), f_utt_id=utt_id, f_test_set_id=test_set, f_system=system, f_name=name, f_user_id=user_id,\
-                        f_score=int(score))
+                        (self.table.f_user_id == user_id), f_utt_id=utt_id, f_test_set_id=test_set, f_name=name, f_user_id=user_id,\
+                        f_result=result)
         return utt_id
 
 

@@ -1,0 +1,21 @@
+(dp1
+S'output'
+p2
+S"<type 'exceptions.UnboundLocalError'> local variable 'audio_ref' referenced before assignment"
+p3
+sS'layer'
+p4
+S'/var/www/web2py/applications/AB/controllers/eval.py'
+p5
+sS'code'
+p6
+S'# -*- coding: utf-8 -*-\n# try something like\nimport myutils\nfrom gluon.sql import Row\nfrom gluon.debug import dbg\ndb_helper = myutils.DbHelper(db)\n\ndef init_multi_page(page):\n    multi_page = None\n    multi_page, items_per_page = myutils.setup_multi_page(page)\n    return multi_page, items_per_page\n\ndef check_update_record(vars):\n    if "utt_id" in vars:\n        if "score_select" in vars:\n            res_uttid = db_helper.t_result.save(vars.utt_id, vars.name,\n                        vars.test_set, vars.user_id, vars.score_select, system=vars.system)\n    else:\n        return 1\n    return 0\n\ndef index():\n    from random import shuffle\n    page = int(request.args[0])\n\n    update_s = check_update_record(request.vars)\n    if update_s == 2:\n        response.flash=T("Input difference score for each utterance")\n    elif update_s == 3:\n        response.flash=T("Input values")\n    elif update_s == 1:\n        do_nothing = 1\n    else:\n        redirect(URL(\'eval\',\'index\', args=[page+1],vars=dict(test_set=request.vars.test_set,\\\n                                                             user_id=request.vars.user_id)))\n    litmitby, items_per_page = init_multi_page(page)\n\n    finish_item = [x.f_name for x in db_helper.t_result.find_by_user_id(int(request.vars.user_id))]\n    utt_fetcher = db_helper.mk_fetcher((db.t_data.f_test_set_id == request.vars.test_set) & \\\n                                        (~db.t_data.f_name.belongs(finish_item)))\n    utt_records = utt_fetcher(db.t_data.ALL)\n    all_utts = myutils.record2object(utt_records, myutils.AudioUtter)\n    # dbg.set_trace()\n    rows = []\n            # TABLE(\n                # TR(TD(utt.text)),\n                # TR(TD(utt.gen_htmlwav(request))),\n                # SELECT(_name=\'score_select\', *[OPTION(i, _value=i) for i in range(1, 6)])\n            # ),BR(),\n    for utt in all_utts:\n        form = FORM(\n            utt.gen_html(request),\n            BR(),\n            INPUT(_type=\'submit\'), _action=\'\', _method=\'post\',_id="abcde",\\\n            hidden=dict(utt_id=utt.id, name=utt.name, method_1=utt.method_1),\n        )\n        a=Row()\n        a.__setattr__("form",form)\n        rows.append(a)\n    return dict(rows=rows, page=page,items_per_page=items_per_page, finish_item=len(finish_item))\n\nresponse._vars=response._caller(index)\n'
+p7
+sS'snapshot'
+p8
+(dp9
+sS'traceback'
+p10
+S'Traceback (most recent call last):\n  File "/var/www/web2py/gluon/restricted.py", line 224, in restricted\n    exec ccode in environment\n  File "/var/www/web2py/applications/AB/controllers/eval.py", line 62, in <module>\n  File "/var/www/web2py/gluon/globals.py", line 393, in <lambda>\n    self._caller = lambda f: f()\n  File "/var/www/web2py/applications/AB/controllers/eval.py", line 52, in index\n    utt.gen_html(request),\n  File "applications/AB/modules/myutils.py", line 36, in gen_html\n    data_audio = [audio_1, audio_2, audio_ref]\nUnboundLocalError: local variable \'audio_ref\' referenced before assignment\n'
+p11
+s.
