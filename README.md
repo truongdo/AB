@@ -1,6 +1,6 @@
-# MOS
+# [X]AB
 ## Introduction ##
-This is a AB[x] evaluation web-based application based on web2py.
+This is a [X]AB evaluation web-based application based on web2py.
 
 __Features list__:
 
