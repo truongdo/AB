@@ -3,6 +3,7 @@
 import myutils
 from gluon.sql import Row
 from gluon.debug import dbg
+from random import shuffle
 db_helper = myutils.DbHelper(db)
 
 def init_multi_page(page):
@@ -14,10 +15,34 @@ def check_update_record(vars):
     if "utt_id" in vars:
         if "cb" in vars:
             res_uttid = db_helper.t_result.save(vars.utt_id, vars.name,
-                        vars.test_set, vars.user_id, vars.cb)
+                        vars.test_set, vars.user_id, vars.cb, vars.compare_method)
     else:
         return 1
     return 0
+
+def get_result():
+    utt_fetcher = db_helper.mk_fetcher(None)
+    utt_records = utt_fetcher(db.t_result.ALL)
+    
+    result = {}
+
+    for record in utt_records:
+        utt_name = record.f_name.split("-")[0]
+        method1, method2 = record.f_systems.split("-")
+        compare_method = method1 + "-" + method2
+
+        if compare_method not in result:
+            result[compare_method] = {}
+
+        if method1 not in result[compare_method]:
+            result[compare_method][method1] = 0
+
+        if method2 not in result[compare_method]:
+            result[compare_method][method2] = 0
+        
+        result[compare_method][record.f_result] += 1
+    
+    return dict(result=result)
 
 def index():
     from random import shuffle
@@ -37,10 +62,12 @@ def index():
     litmitby, items_per_page = init_multi_page(page)
 
     finish_item = [x.f_name for x in db_helper.t_result.find_by_user_id(int(request.vars.user_id))]
+
     utt_fetcher = db_helper.mk_fetcher((db.t_data.f_test_set_id == request.vars.test_set) & \
                                         (~db.t_data.f_name.belongs(finish_item)))
     utt_records = utt_fetcher(db.t_data.ALL)
     all_utts = myutils.record2object(utt_records, myutils.AudioUtter)
+    # shuffle(all_utts)
     # dbg.set_trace()
     rows = []
     for utt in all_utts:
@@ -49,7 +76,7 @@ def index():
             utt.gen_html(request),
             BR(),
             INPUT(_type='submit'), _action='', _method='post',_id="abcde",\
-            hidden=dict(utt_id=utt.id, name=utt.name),
+            hidden=dict(utt_id=utt.id, name=utt.name, compare_method = utt.method_1 + "-" + utt.method_2),
         )
         a=Row()
         a.__setattr__("form",form)

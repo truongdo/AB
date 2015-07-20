@@ -8,4 +8,5 @@ response.menu = [
 (T('Data'),URL('default','data_manage')==URL(),URL('default','data_manage'),[]),
 (T('Result'),URL('default','result_manage')==URL(),URL('default','result_manage'),[]),
 (T('User'),URL('default','user_manage')==URL(),URL('default','user_manage'),[]),
+(T('See result'),URL('eval','get_result')==URL(),URL('eval','get_result'),[]),
 ]

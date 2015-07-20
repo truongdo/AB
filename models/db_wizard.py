@@ -31,6 +31,8 @@ db.define_table('t_data_archive',db.t_data,Field('current_record','reference t_d
 db.define_table('t_result',
     Field('f_name', type='string',
           label=T('Name')),
+    Field('f_systems', type='string',
+          label=T('Compare systems')),
     Field('f_test_set_id', type='string',
           label=T('Test Set ID')),
     Field('f_utt_id', type='integer',

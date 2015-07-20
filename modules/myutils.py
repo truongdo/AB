@@ -109,10 +109,10 @@ class ResultTable:
                     (self.table.f_user_id == user_id), f_utt_id=utt.id, f_user_id=user_id, f_score=int(utt.score))
         return utt_id
 
-    def save(self,utt_id, name, test_set, user_id, result):
+    def save(self,utt_id, name, test_set, user_id, result, compare_method):
         utt_id = self.table.update_or_insert((self.table.f_utt_id==utt_id) & \
                         (self.table.f_user_id == user_id), f_utt_id=utt_id, f_test_set_id=test_set, f_name=name, f_user_id=user_id,\
-                        f_result=result)
+                        f_result=result, f_systems=compare_method)
         return utt_id
 
 
